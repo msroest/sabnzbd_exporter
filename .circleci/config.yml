@@ -21,3 +21,4 @@ jobs:
               docker login -u $DOCKERLOGIN -p $DOCKERPASS
               docker push msroest/sabnzbd_exporter:0.1.$CIRCLE_BUILD_NUM
               docker push msroest/sabnzbd_exporter:latest
+            fi
