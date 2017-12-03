@@ -9,5 +9,5 @@ This is a metrics exporter for sending statistics from sabnzbd (https://sabnzbd.
 
 OR
 
-docker run -e SABNZBD_BASEURL=http://sabnzbd host/ip:port/sabnzbd -e SABNZBD_APIKEY=<apikey> -p 9199:9199 -d --restart=always msroest/sabnzbd_exporter
+docker run -e SABNZBD_BASEURL=http://sabnzbd host/ip:port/sabnzbd -e SABNZBD_APIKEY=<apikey> -p 9387:9387 -d --restart=always msroest/sabnzbd_exporter
 
