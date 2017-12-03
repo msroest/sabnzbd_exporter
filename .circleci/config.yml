@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /app
     docker:
-      - image: 17.11.0-ce
+      - image: docker:17.11.0-ce
     steps:
       - checkout
       - setup_remote_docker
