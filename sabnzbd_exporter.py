@@ -5,7 +5,10 @@ import threading
 from prometheus_client import start_http_server
 from prometheus_client.core import GaugeMetricFamily, REGISTRY
 
-PORT = int(os.environ['PORT'])
+PORT=9387
+if 'PORT' in os.environ:
+    PORT = int(os.environ['PORT'])
+
 APIBASEURL = os.environ['SABNZBD_BASEURL']
 APIKEY = os.environ['SABNZBD_APIKEY']
 
