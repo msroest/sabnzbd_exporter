@@ -35,7 +35,7 @@ class CustomCollector(object):
                     server_dwn.add_metric([server,metric],val)
             yield server_dwn
             queue_stats = requests.get(getAPIUrl('queue')).json()["queue"]
-            yield GaugeMetricFamily('sabnzbd_queue_count','SABnzbd Current Queue Length',value=queue_stats['noofslots_total'])
+            yield GaugeMetricFamily('sabnzbd_queue_size','SABnzbd Current Queue Length',value=queue_stats['noofslots_total'])
             yield GaugeMetricFamily('sabnzbd_queue_download_rate_bytes_per_second','SABnzbd download rate',value=float(queue_stats['kbpersec'])*1024)
             yield GaugeMetricFamily('sabnzbd_queue_remaining_bytes','SABnzbd queue remaining size',value=float(queue_stats['mbleft'])*1024*1024)
             yield GaugeMetricFamily('sabnzbd_queue_total_size_bytes','SABnzbd queue total size',value=float(queue_stats['mb'])*1024*1024)
