@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    working_directory: /app
+    docker:
+      - image: docker:17.11.0-ce
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: 
+          name: Build Docker Image
+          command: |
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker build -t msroest/sabnzbd_exporter:latest .
+            docker tag msroest/sabnzbd_exporter:latest msroest/sabnzbd_exporter:$TAG
+            docker images
+      - deploy:
+          name: Push to Docker Hub
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker login -u $DOCKERLOGIN -p $DOCKERPASS
+              docker push msroest/sabnzbd_exporter:0.1.$CIRCLE_BUILD_NUM
+              docker push msroest/sabnzbd_exporter:latest
+            fi
