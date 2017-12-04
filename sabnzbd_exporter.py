@@ -46,8 +46,7 @@ class CustomCollector(object):
             yield GaugeMetricFamily('sabnzbd_queue_total_size_bytes','SABnzbd queue total size',value=float(queue_stats['mb'])*1024*1024)
             yield GaugeMetricFamily('sabnzbd_queue_remaining_seconds','SABnzbd estimated time remaining',value=get_sec(queue_stats['timeleft']))
         except Exception as inst:
-            logging.error('Error getting stats')
-            logging.error(inst)
+            logging.error('Error getting stats: %s', inst)
 
 
 REGISTRY.register(CustomCollector())
