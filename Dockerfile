@@ -8,4 +8,4 @@ RUN pip install prometheus_client requests
 
 COPY sabnzbd_exporter.py /sabnzbd_exporter.py
 
-ENTRYPOINT ["python","-u","/sabnzbd_exporter.py"]
+ENTRYPOINT ["python","/sabnzbd_exporter.py"]
