@@ -13,7 +13,7 @@ if 'PORT' in os.environ:
 APIBASEURL = os.environ['SABNZBD_BASEURL']
 APIKEY = os.environ['SABNZBD_APIKEY']
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',level=logging.INFO,  datefmt='%Y/%m/%d %H:%M:%S')
 logging.info("Starting sabnzbd_exporter on port: %d",PORT)
 logging.info("Connecting to %s",APIBASEURL)
 
