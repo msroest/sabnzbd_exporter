@@ -3,6 +3,7 @@ import requests
 import prometheus_client
 import threading
 import logging
+import time
 from prometheus_client import start_http_server
 from prometheus_client.core import GaugeMetricFamily, REGISTRY
 
@@ -27,7 +28,11 @@ def get_sec(time_str):
 class CustomCollector(object):
     def collect(self):
         try:
-            server_stats = requests.get(getAPIUrl('server_stats')).json()
+            server_stats_url = getAPIUrl('server_stats')
+            start = time.time()
+            server_stats = requests.get(server_stats_url).json()
+            elapsed = time.time() - start
+            logging.info("Request to %s returned in %s",server_stats_url, elapsed)
             dwn = GaugeMetricFamily('sabnzbd_download_bytes', 'SABnzbd Overall download metrics', labels=['period'])
             dwn.add_metric(['total'], server_stats['total'])
             dwn.add_metric(['day'], server_stats['day'])
@@ -39,7 +44,11 @@ class CustomCollector(object):
                 for metric,val in metrics.items():
                     server_dwn.add_metric([server,metric],val)
             yield server_dwn
-            queue_stats = requests.get(getAPIUrl('queue')).json()["queue"]
+            start = time.time()
+            queue_stats_url = getAPIUrl('queue')
+            queue_stats = requests.get(queue_stats_url).json()["queue"]
+            elapsed = time.time() - start
+            logging.info("Request to %s returned in %s",queue_stats_url, elapsed)
             yield GaugeMetricFamily('sabnzbd_queue_size','SABnzbd Current Queue Length',value=queue_stats['noofslots_total'])
             yield GaugeMetricFamily('sabnzbd_queue_download_rate_bytes_per_second','SABnzbd download rate',value=float(queue_stats['kbpersec'])*1024)
             yield GaugeMetricFamily('sabnzbd_queue_remaining_bytes','SABnzbd queue remaining size',value=float(queue_stats['mbleft'])*1024*1024)
