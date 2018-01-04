@@ -40,7 +40,8 @@ class CustomCollector(object):
             server_dwn = GaugeMetricFamily('sabnzbd_server_download_bytes','SABnzbd per server download metrics',labels=['server','period'])
             for server, metrics in server_stats['servers'].items():
                 for metric,val in metrics.items():
-                    server_dwn.add_metric([server,metric],val)
+                    if metric != 'daily':
+                        server_dwn.add_metric([server,metric],val)
             yield server_dwn
             start = time.time()
             queue_stats_url = getAPIUrl('queue')
