@@ -3,10 +3,11 @@ jobs:
   build:
     working_directory: /app
     docker:
-      - image: docker:17.11.0-ce
+      - image: cimg/base:2020.01
     steps:
       - checkout
       - setup_remote_docker
+          version: 19:03.13
       - run: 
           name: Build Docker Image
           command: |
@@ -17,7 +18,7 @@ jobs:
       - deploy:
           name: Push to Docker Hub
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "main" ]; then
               docker login -u $DOCKERLOGIN -p $DOCKERPASS
               docker push msroest/sabnzbd_exporter:0.1.$CIRCLE_BUILD_NUM
               docker push msroest/sabnzbd_exporter:latest
