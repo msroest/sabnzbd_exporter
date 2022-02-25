@@ -2,23 +2,30 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/base:2020.01
+      - image: cimg/base:2022.02
+    environment:
+      
     steps:
       - checkout
       - setup_remote_docker:
-          version: 19.03.13
+          version: 20.10.11
       - run: 
           name: Build Docker Image
           command: |
+            set +x
+            export DOCKER_CLI_EXPERIMENTAL=enabled
+            export DOCKER_BUILDKIT=1
             TAG=0.1.$CIRCLE_BUILD_NUM
-            docker build -t msroest/sabnzbd_exporter:latest .
-            docker tag msroest/sabnzbd_exporter:latest msroest/sabnzbd_exporter:$TAG
-            docker images
-      - deploy:
-          name: Push to Docker Hub
-          command: |
+            mkdir -p ~/.docker/cli-plugins/
+            curl --silent -L --output ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.7.0/buildx-v0.7.0.linux-amd64
+            chmod a+x ~/.docker/cli-plugins/docker-buildx
+            docker run --rm --privileged linuxkit/binfmt:a17941b47f5cb262638cfb49ffc59ac5ac2bf334
+            docker context create multi-arch-build
+            docker buildx create --use multi-arch-build --platform linux/arm/v7,linux/arm64/v8,linux/amd64
+            ADDITIONAL_PARAMETERS=""
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              docker login -u $DOCKERLOGIN -p $DOCKERPASS
-              docker push msroest/sabnzbd_exporter:0.1.$CIRCLE_BUILD_NUM
-              docker push msroest/sabnzbd_exporter:latest
+              ADDITIONAL_PARAMETERS="--push"
             fi
+            docker buildx build --platform linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/amd64 -t msroest/sabnzbd_exporter:latest -t msroest/sabnzbd_exporter:$TAG .
+            
+            docker images
