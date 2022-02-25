@@ -4,8 +4,7 @@ jobs:
     docker:
       - image: cimg/base:2022.02
     environment:
-      DOCKER_BUILDKIT: 1
-      BUILDX_PLATFORMS: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6 
+      
     steps:
       - checkout
       - setup_remote_docker:
@@ -13,6 +12,8 @@ jobs:
       - run: 
           name: Build Docker Image
           command: |
+            set +x
+            export DOCKER_BUILDKIT=1
             TAG=0.1.$CIRCLE_BUILD_NUM
             curl --silent -L --output ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.7.0/buildx-v0.7.0.linux-amd64
             chmod a+x ~/.docker/cli-plugins/docker-buildx
