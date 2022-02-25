@@ -1,8 +1,9 @@
-FROM frolvlad/alpine-python3:latest
+FROM alpine:3.15
 
 EXPOSE 9387
 
-RUN pip install prometheus_client requests && apk update && apk add curl
+RUN apk add --update --no-cache python3 py3-pip curl && \
+pip install prometheus_client requests
 
 COPY sabnzbd_exporter.py /sabnzbd_exporter.py
 
