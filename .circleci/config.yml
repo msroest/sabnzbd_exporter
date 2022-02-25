@@ -25,6 +25,7 @@ jobs:
             ADDITIONAL_PARAMETERS=""
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
               ADDITIONAL_PARAMETERS="--push"
+              echo $DOCKERPASS | docker login --username $DOCKERLOGIN --password-stdin
             fi
             docker buildx build $ADDITIONAL_PARAMETERS --platform linux/arm/v6,linux/arm/v7,linux/arm64/v8,linux/amd64 -t msroest/sabnzbd_exporter:latest -t msroest/sabnzbd_exporter:$TAG .
             
