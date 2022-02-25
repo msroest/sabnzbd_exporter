@@ -19,7 +19,7 @@ jobs:
             mkdir -p ~/.docker/cli-plugins/
             curl --silent -L --output ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.7.0/buildx-v0.7.0.linux-amd64
             chmod a+x ~/.docker/cli-plugins/docker-buildx
-            update-binfmts --enable
+            docker run --rm --privileged linuxkit/binfmt:a17941b47f5cb262638cfb49ffc59ac5ac2bf334
             docker context create multi-arch-build
             docker buildx create --use multi-arch-build --platform linux/arm/v7,linux/arm64/v8,linux/amd64
             docker buildx build --platform linux/arm/v7,linux/arm64/v8,linux/amd64 -t msroest/sabnzbd_exporter:latest .
