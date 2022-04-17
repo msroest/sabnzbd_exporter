@@ -51,14 +51,14 @@ class CustomCollector(object):
                 logging.info("Request to %s returned in %s",
                             server_stats_url, elapsed)
                 dwn = GaugeMetricFamily(
-                    'sabnzbd_download_bytes', 'SABnzbd Overall download metrics', labels=['period', 'instance'])
+                    'sabnzbd_download_bytes', 'SABnzbd Overall download metrics', labels=['period', 'sabnzbd_instance'])
                 dwn.add_metric(['total', base_url], server_stats['total'])
                 dwn.add_metric(['day', base_url], server_stats['day'])
                 dwn.add_metric(['week', base_url], server_stats['week'])
                 dwn.add_metric(['month', base_url], server_stats['month'])
                 yield dwn
                 server_dwn = GaugeMetricFamily('sabnzbd_server_download_bytes', 'SABnzbd per server download metrics', labels=[
-                                            'server', 'period', 'instance'])
+                                            'server', 'period', 'sabnzbd_instance'])
                 for server, metrics in server_stats['servers'].items():
                     for metric, val in metrics.items():
                         if metric != 'daily' and metric != 'articles_tried' and metric != 'articles_success':
@@ -72,25 +72,25 @@ class CustomCollector(object):
                 logging.info("Request to %s returned in %s",
                             queue_stats_url, elapsed)
                 qsize = GaugeMetricFamily(
-                    'sabnzbd_queue_size', 'SABnzbd Current Queue Length', labels=['instance'])
+                    'sabnzbd_queue_size', 'SABnzbd Current Queue Length', labels=['sabnzbd_instance'])
                 qsize.add_metric([base_url], queue_stats['noofslots_total'])
                 yield qsize
                 drate = GaugeMetricFamily(
-                    'sabnzbd_queue_download_rate_bytes_per_second', 'SABnzbd download rate', labels=['instance'])
+                    'sabnzbd_queue_download_rate_bytes_per_second', 'SABnzbd download rate', labels=['sabnzbd_instance'])
                 drate.add_metric([base_url], float(queue_stats['kbpersec'])*1024)
                 yield drate
                 qremaining_bytes = GaugeMetricFamily(
-                    'sabnzbd_queue_remaining_bytes', 'SABnzbd queue remaining size', labels=['instance'])
+                    'sabnzbd_queue_remaining_bytes', 'SABnzbd queue remaining size', labels=['sabnzbd_instance'])
                 qremaining_bytes.add_metric(
                     [base_url], float(queue_stats['mbleft'])*1024*1024)
                 yield qremaining_bytes
                 qtotal_bytes = GaugeMetricFamily(
-                    'sabnzbd_queue_total_size_bytes', 'SABnzbd queue total size', labels=['instance'])
+                    'sabnzbd_queue_total_size_bytes', 'SABnzbd queue total size', labels=['sabnzbd_instance'])
                 qtotal_bytes.add_metric(
                     [base_url], float(queue_stats['mb'])*1024*1024)
                 yield qtotal_bytes
                 qremaining_time = GaugeMetricFamily(
-                    'sabnzbd_queue_remaining_seconds', 'SABnzbd estimated time remaining', labels=['instance'])
+                    'sabnzbd_queue_remaining_seconds', 'SABnzbd estimated time remaining', labels=['sabnzbd_instance'])
                 qremaining_time.add_metric(
                     [base_url], get_sec(queue_stats['timeleft']))
                 yield qremaining_time
