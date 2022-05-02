@@ -1,0 +1,10 @@
+- job_name: sabnzbd-exporter
+  honor_timestamps: true
+  scrape_interval: 5s
+  scrape_timeout: 5s
+  metrics_path: /metrics
+  scheme: http
+  follow_redirects: true
+  static_configs:
+  - targets:
+    - <exporter machine name/ip>:9387
