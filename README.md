@@ -9,7 +9,7 @@ This exporter is configured by environment variables.  There are 2 required envi
 
 (Previously this module only supported a single server and so the environment variables were not pluralized SABNZBD_BASEURL & SABNZBD_APIKEY these values are still supported for backwards compatibility but the plural versions are preferred)
 
-## Running/Developing∏
+## Running/Developing
 1. Create a new python virtual env `python3 -m venv .venv`
 2. Install the required modules into your venv `./.venv/bin/pip3 install -r requirements.txt`
 3. Start the server locally
