@@ -8,10 +8,11 @@ from prometheus_client import start_http_server
 from prometheus_client.core import GaugeMetricFamily, REGISTRY
 
 
-PORT = 9387
 logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     level=logging.INFO,  datefmt='%Y/%m/%d %H:%M:%S')
 
+METRICS_PORT = int(os.getenv('METRICS_PORT', 9387))
+METRICS_ADDR = os.getenv('METRICS_ADDR', '0.0.0.0')
 APIBASEURLS = os.getenv('SABNZBD_BASEURLS',os.getenv('SABNZBD_BASEURL','')).split(',')
 APIKEYS = os.getenv('SABNZBD_APIKEYS', os.getenv('SABNZBD_APIKEY','')).split(',')
 
@@ -25,7 +26,7 @@ if len(APIBASEURLS) != len(APIKEYS):
     logging.error(f'Number of API urls {len(APIBASEURLS)} doesn\'t match number of API keys {len(APIKEYS)}')
     sys.exit(1)
 
-logging.info("Starting sabnzbd_exporter on port: %d", PORT)
+logging.info("Starting sabnzbd_exporter on port: %d", METRICS_PORT)
 logging.info("Connecting to %s", str(APIBASEURLS))
 
 url_to_key_map={}
@@ -99,7 +100,7 @@ class CustomCollector(object):
 
 
 REGISTRY.register(CustomCollector())
-start_http_server(PORT)
+start_http_server(port=METRICS_PORT, addr=METRICS_ADDR)
 
 DE = threading.Event()
 DE.wait()
