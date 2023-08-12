@@ -37,6 +37,6 @@ jobs:
             
             docker images
             if [ "${CIRCLE_BRANCH}" == "main" ]; then
-              ghr -generatenotes -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${TAG}
+              ./ghr -generatenotes -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${TAG}
             fi
             
