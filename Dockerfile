@@ -1,4 +1,4 @@
-FROM python:alpine3.15
+FROM python:alpine3.18
 
 EXPOSE 9387
 COPY sabnzbd_exporter.py /sabnzbd_exporter.py
