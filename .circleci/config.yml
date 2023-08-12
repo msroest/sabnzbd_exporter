@@ -18,7 +18,7 @@ jobs:
             mv ghr_v0.16.0_linux_amd64/ghr ./ghr
             rm -rf ghr_v0.16.0_linux_amd64
             chmod +x ghr
-            ghr --version
+            ./ghr --version
             export DOCKER_CLI_EXPERIMENTAL=enabled
             export DOCKER_BUILDKIT=1
             TAG=0.1.$CIRCLE_BUILD_NUM
