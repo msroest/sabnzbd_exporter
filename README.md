@@ -41,5 +41,6 @@ sabnzbd_queue_download_rate_bytes_per_second | Curent download rate | Gauge |
 sabnzbd_queue_remaining_bytes | Queue bytes remaining | Gauge |
 sabnzbd_queue_total_size_bytes | Queue total size bytes | Gauge |
 sabnzbd_queue_remaining_seconds | Estimated queue time remaining | Gauge |
+sabnzbd_paused | Is sabnzbd paused | Guage |
 
 * Period label values (total,day,week,month)
