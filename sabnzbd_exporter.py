@@ -42,6 +42,7 @@ def get_sec(time_str):
     h, m, s = time_str.split(':')
     return int(h) * 3600 + int(m) * 60 + int(s)
 
+get_binary_state = lambda state: 1 if state else 0
 
 class CustomCollector(object):
     def collect(self):
@@ -97,6 +98,11 @@ class CustomCollector(object):
                 qremaining_time.add_metric(
                     [base_url], get_sec(queue_stats['timeleft']))
                 yield qremaining_time
+                paused = GaugeMetricFamily(
+                    'sabnzbd_paused', 'SABnzbd pause state', labels=['sabnzbd_instance'])
+                paused.add_metric (
+                    [base_url], get_binary_state(queue_stats['paused']))
+                yield paused
         except Exception as inst:
             logging.error('Error getting stats: %s', inst)
 
