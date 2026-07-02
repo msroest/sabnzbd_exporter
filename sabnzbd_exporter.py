@@ -39,8 +39,19 @@ def getAPIUrl(base_url, mode):
     return '{}/api?output=json&apikey={}&mode={}'.format(base_url, url_to_key_map[base_url], mode)
 
 def get_sec(time_str):
-    h, m, s = time_str.split(':')
-    return int(h) * 3600 + int(m) * 60 + int(s)
+    # SABnzbd's `timeleft` is normally "H:MM:SS", but grows a leading day
+    # component ("D:HH:MM:SS") once the queue has more than 24h remaining.
+    # A plain 3-way unpack raises ValueError in that case, which the caller's
+    # bare `except Exception` swallows -- silently dropping this metric AND
+    # sabnzbd_paused (yielded right after it in the same try block) for any
+    # scrape where the queue is large. Parse from the right instead so any
+    # number of leading day components works.
+    parts = time_str.split(':')
+    s = int(parts[-1])
+    m = int(parts[-2]) if len(parts) > 1 else 0
+    h = int(parts[-3]) if len(parts) > 2 else 0
+    d = int(parts[-4]) if len(parts) > 3 else 0
+    return d * 86400 + h * 3600 + m * 60 + s
 
 get_binary_state = lambda state: 1 if state else 0
 
