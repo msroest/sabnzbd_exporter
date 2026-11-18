@@ -7,6 +7,9 @@ This exporter is configured by environment variables.  There are 2 required envi
   * SABNZBD_BASEURLS - Comma seperated list of sabnzbd servers to connect to in the fomat http://\<sabnzbd host/ip\>:\<port\>/sabnzbd
   * SABNZBD_APIKEYS - Comma seperated list of API keys.  Positionally each API key must be for the same server as in the equivilent position of the SABNZBD_BASEURLS
 
+Optional environment variables
+  * SABNZBD_TIMEOUT - Seconds to wait for each SABnzbd API request before giving up (default 10)
+
 (Previously this module only supported a single server and so the environment variables were not pluralized SABNZBD_BASEURL & SABNZBD_APIKEY these values are still supported for backwards compatibility but the plural versions are preferred)
 
 ## Running/Developing
@@ -24,9 +27,12 @@ docker run \
    -e SABNZBD_APIKEYS=<apikey> \
    -p 9387:9387 \
    -d --restart=always \
+   --init \
    -n sabnzbd_exporter \
    msroest/sabnzbd_exporter
 ```
+
+`--init` (or `init: true` in docker compose) runs a small init process as PID 1 so that any processes orphaned by the container's healthcheck are reaped instead of piling up as zombies.
 
 ## Exported Metrics
 Common Labels
