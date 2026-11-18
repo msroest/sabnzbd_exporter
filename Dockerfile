@@ -6,6 +6,6 @@ COPY requirements.txt /requirements.txt
 RUN apk add --update --no-cache curl && \
 pip install -r /requirements.txt && rm -rf requirements.txt
 
-HEALTHCHECK --interval=1m CMD /usr/bin/curl -f http://localhost:9387/ || exit 1
+HEALTHCHECK --interval=1m CMD /usr/bin/curl -f --max-time 25 http://localhost:9387/ || exit 1
 
 ENTRYPOINT ["python","/sabnzbd_exporter.py"]

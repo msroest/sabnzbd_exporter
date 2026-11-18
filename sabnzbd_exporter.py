@@ -17,6 +17,8 @@ METRICS_PORT = int(os.getenv('METRICS_PORT', 9387))
 METRICS_ADDR = os.getenv('METRICS_ADDR', '0.0.0.0')
 APIBASEURLS = os.getenv('SABNZBD_BASEURLS',os.getenv('SABNZBD_BASEURL','')).split(',')
 APIKEYS = os.getenv('SABNZBD_APIKEYS', os.getenv('SABNZBD_APIKEY','')).split(',')
+# Seconds to wait on each SABnzbd API call; without a timeout a stalled server hangs the scrape forever.
+REQUEST_TIMEOUT = float(os.getenv('SABNZBD_TIMEOUT', 10))
 
 if APIBASEURLS == ['']: 
     logging.error("Either SABNZBD_BASEURL or SABNZBD_BASEURLS environment variable is required")
@@ -50,7 +52,7 @@ class CustomCollector(object):
             for base_url in APIBASEURLS:
                 server_stats_url = getAPIUrl(base_url,'server_stats')
                 start = time.time()
-                server_stats = requests.get(server_stats_url).json()
+                server_stats = requests.get(server_stats_url, timeout=REQUEST_TIMEOUT).json()
                 elapsed = time.time() - start
                 logging.info("Request to %s returned in %s",
                             server_stats_url, elapsed)
@@ -71,7 +73,7 @@ class CustomCollector(object):
                 yield server_dwn
                 start = time.time()
                 queue_stats_url = getAPIUrl(base_url,'queue')
-                queue_stats = requests.get(queue_stats_url).json()["queue"]
+                queue_stats = requests.get(queue_stats_url, timeout=REQUEST_TIMEOUT).json()["queue"]
                 elapsed = time.time() - start
                 logging.info("Request to %s returned in %s",
                             queue_stats_url, elapsed)
